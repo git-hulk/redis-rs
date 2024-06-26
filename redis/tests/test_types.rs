@@ -34,7 +34,7 @@ mod types {
         assert_eq!(twobytesslice.num_of_args(), 2);
         assert_eq!(twobytesvec.num_of_args(), 2);
         assert_eq!(Arc::new(twobytesslice).num_of_args(), 2);
-        assert_eq!(!Rc::new(twobytesslice).num_of_args(), 2);
+        assert_eq!(Rc::new(twobytesslice).num_of_args(), 2);
     }
 
     /// The `FromRedisValue` trait provides two methods for parsing:

@@ -1248,6 +1248,11 @@ pub trait ToRedisArgs: Sized {
             item.write_redis_args(out);
         }
     }
+
+    #[doc(hidden)]
+    fn is_single_vec_arg(items: &[Self]) -> bool {
+        items.is_empty() || items.len() == 1 && items[0].num_of_args() <= 1
+    }
 }
 
 macro_rules! itoa_based_to_redis_impl {
@@ -1322,6 +1327,9 @@ impl ToRedisArgs for u8 {
         W: ?Sized + RedisWrite,
     {
         out.write_arg(items);
+    }
+    fn is_single_vec_arg(_items: &[u8]) -> bool {
+        true
     }
 }
 
@@ -1429,6 +1437,9 @@ impl<T: ToRedisArgs> ToRedisArgs for Vec<T> {
     }
 
     fn num_of_args(&self) -> usize {
+        if ToRedisArgs::is_single_vec_arg(&self[..]) {
+            return 1;
+        }
         if self.len() == 1 {
             self[0].num_of_args()
         } else {
@@ -1446,6 +1457,9 @@ impl<'a, T: ToRedisArgs> ToRedisArgs for &'a [T] {
     }
 
     fn num_of_args(&self) -> usize {
+        if ToRedisArgs::is_single_vec_arg(&self[..]) {
+            return 1;
+        }
         if self.len() == 1 {
             self[0].num_of_args()
         } else {
@@ -1661,11 +1675,13 @@ impl<T: ToRedisArgs, const N: usize> ToRedisArgs for &[T; N] {
     }
 
     fn num_of_args(&self) -> usize {
-        let slice: &[T] = self.as_slice();
-        if slice.len() == 1 {
-            slice[0].num_of_args()
+        if ToRedisArgs::is_single_vec_arg(&self[..]) {
+            return 1;
+        }
+        if self.len() == 1 {
+            self[0].num_of_args()
         } else {
-            slice.len()
+            self.len()
         }
     }
 }
