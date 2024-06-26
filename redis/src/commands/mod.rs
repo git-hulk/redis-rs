@@ -135,7 +135,7 @@ implement_commands! {
 
     /// Get the value of a key.  If key is a vec this becomes an `MGET`.
     fn get<K: ToRedisArgs>(key: K) {
-        cmd(if key.is_single_arg() { "GET" } else { "MGET" }).arg(key)
+        cmd(if key.num_of_args() <= 1 { "GET" } else { "MGET" }).arg(key)
     }
 
     /// Get values of keys
@@ -373,7 +373,7 @@ implement_commands! {
 
     /// Gets a single (or multiple) fields from a hash.
     fn hget<K: ToRedisArgs, F: ToRedisArgs>(key: K, field: F) {
-        cmd(if field.is_single_arg() { "HGET" } else { "HMGET" }).arg(key).arg(field)
+        cmd(if field.num_of_args() <= 1 { "HGET" } else { "HMGET" }).arg(key).arg(field)
     }
 
     /// Deletes a single (or multiple) fields from a hash.
@@ -2229,8 +2229,15 @@ impl ToRedisArgs for ScanOptions {
         }
     }
 
-    fn is_single_arg(&self) -> bool {
-        false
+    fn num_of_args(&self) -> usize {
+        let mut len = 0;
+        if self.pattern.is_some() {
+            len += 2;
+        }
+        if self.count.is_some() {
+            len += 2;
+        }
+        len
     }
 }
 
@@ -2303,8 +2310,18 @@ impl ToRedisArgs for LposOptions {
         }
     }
 
-    fn is_single_arg(&self) -> bool {
-        false
+    fn num_of_args(&self) -> usize {
+        let mut len = 0;
+        if self.count.is_some() {
+            len += 2;
+        }
+        if self.rank.is_some() {
+            len += 2;
+        }
+        if self.maxlen.is_some() {
+            len += 2;
+        }
+        len
     }
 }
 
