@@ -1251,7 +1251,7 @@ pub trait ToRedisArgs: Sized {
 
     #[doc(hidden)]
     fn is_single_vec_arg(items: &[Self]) -> bool {
-        items.is_empty() || items.len() == 1 && items[0].num_of_args() <= 1
+        items.len() == 1 && items[0].num_of_args() <= 1
     }
 }
 
@@ -1328,6 +1328,7 @@ impl ToRedisArgs for u8 {
     {
         out.write_arg(items);
     }
+
     fn is_single_vec_arg(_items: &[u8]) -> bool {
         true
     }
