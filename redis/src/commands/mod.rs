@@ -673,19 +673,19 @@ implement_commands! {
 
     /// Intersect multiple sorted sets and store the resulting sorted set in
     /// a new key using SUM as aggregation function.
-    fn zinterstore<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: &'a [K]) {
+    fn zinterstore<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: K) {
         cmd("ZINTERSTORE").arg(dstkey).arg(keys.num_of_args()).arg(keys)
     }
 
     /// Intersect multiple sorted sets and store the resulting sorted set in
     /// a new key using MIN as aggregation function.
-    fn zinterstore_min<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: &'a [K]) {
+    fn zinterstore_min<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: K) {
         cmd("ZINTERSTORE").arg(dstkey).arg(keys.num_of_args()).arg(keys).arg("AGGREGATE").arg("MIN")
     }
 
     /// Intersect multiple sorted sets and store the resulting sorted set in
     /// a new key using MAX as aggregation function.
-    fn zinterstore_max<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: &'a [K]) {
+    fn zinterstore_max<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: K) {
         cmd("ZINTERSTORE").arg(dstkey).arg(keys.num_of_args()).arg(keys).arg("AGGREGATE").arg("MAX")
     }
 
@@ -743,26 +743,26 @@ implement_commands! {
     /// Removes and returns up to count members with the highest scores,
     /// from the first non-empty sorted set in the provided list of key names.
     /// Blocks until a member is available otherwise.
-    fn bzmpop_max<K: ToRedisArgs>(timeout: f64, keys: &'a [K], count: isize) {
+    fn bzmpop_max<K: ToRedisArgs>(timeout: f64, keys: K, count: isize) {
         cmd("BZMPOP").arg(timeout).arg(keys.num_of_args()).arg(keys).arg("MAX").arg("COUNT").arg(count)
     }
 
     /// Removes and returns up to count members with the highest scores,
     /// from the first non-empty sorted set in the provided list of key names.
-    fn zmpop_max<K: ToRedisArgs>(keys: &'a [K], count: isize) {
+    fn zmpop_max<K: ToRedisArgs>(keys: K, count: isize) {
         cmd("ZMPOP").arg(keys.num_of_args()).arg(keys).arg("MAX").arg("COUNT").arg(count)
     }
 
     /// Removes and returns up to count members with the lowest scores,
     /// from the first non-empty sorted set in the provided list of key names.
     /// Blocks until a member is available otherwise.
-    fn bzmpop_min<K: ToRedisArgs>(timeout: f64, keys: &'a [K], count: isize) {
+    fn bzmpop_min<K: ToRedisArgs>(timeout: f64, keys: K, count: isize) {
         cmd("BZMPOP").arg(timeout).arg(keys.num_of_args()).arg(keys).arg("MIN").arg("COUNT").arg(count)
     }
 
     /// Removes and returns up to count members with the lowest scores,
     /// from the first non-empty sorted set in the provided list of key names.
-    fn zmpop_min<K: ToRedisArgs>(keys: &'a [K], count: isize) {
+    fn zmpop_min<K: ToRedisArgs>(keys: K, count: isize) {
         cmd("ZMPOP").arg(keys.num_of_args()).arg(keys).arg("MIN").arg("COUNT").arg(count)
     }
 
@@ -910,19 +910,19 @@ implement_commands! {
 
     /// Unions multiple sorted sets and store the resulting sorted set in
     /// a new key using SUM as aggregation function.
-    fn zunionstore<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: &'a [K]) {
+    fn zunionstore<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: K) {
         cmd("ZUNIONSTORE").arg(dstkey).arg(keys.num_of_args()).arg(keys)
     }
 
     /// Unions multiple sorted sets and store the resulting sorted set in
     /// a new key using MIN as aggregation function.
-    fn zunionstore_min<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: &'a [K]) {
+    fn zunionstore_min<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: K) {
         cmd("ZUNIONSTORE").arg(dstkey).arg(keys.num_of_args()).arg(keys).arg("AGGREGATE").arg("MIN")
     }
 
     /// Unions multiple sorted sets and store the resulting sorted set in
     /// a new key using MAX as aggregation function.
-    fn zunionstore_max<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: &'a [K]) {
+    fn zunionstore_max<D: ToRedisArgs, K: ToRedisArgs>(dstkey: D, keys: K) {
         cmd("ZUNIONSTORE").arg(dstkey).arg(keys.num_of_args()).arg(keys).arg("AGGREGATE").arg("MAX")
     }
 
